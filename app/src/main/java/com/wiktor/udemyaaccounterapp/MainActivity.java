@@ -6,35 +6,37 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView textViewCount;
-    private Button buttonIncrement;
-    private Button buttonDecrement;
-    private int count;
+    private MainActivityViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        model = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
 
         textViewCount = findViewById(R.id.textViewCount);
-        buttonIncrement = findViewById(R.id.button_increment);
-        buttonDecrement = findViewById(R.id.button_decrement);
+        Button buttonIncrement = findViewById(R.id.button_increment);
+        Button buttonDecrement = findViewById(R.id.button_decrement);
         buttonIncrement.setOnClickListener(this);
         buttonDecrement.setOnClickListener(this);
+
+        textViewCount.setText(String.valueOf(model.getCurrentValue()));
     }
 
+
     private void decreaseValue() {
-        count--;
-        textViewCount.setText(String.valueOf(count));
+        textViewCount.setText(String.valueOf(model.getDecreaseValue()));
     }
 
     private void increaseValue() {
-        count++;
-        textViewCount.setText(String.valueOf(count));
+        textViewCount.setText(String.valueOf(model.getIncreaseValue()));
     }
 
     @Override
