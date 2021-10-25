@@ -1,20 +1,25 @@
 package com.wiktor.udemyaaccounterapp;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class MainActivityViewModel extends ViewModel {
 
     private int count;
+    private MutableLiveData<Integer> countLiveData = new MutableLiveData<>();
 
-    public int getDecreaseValue() {
-        return --count;
+    public void getDecreaseValue() {
+        --count;
+        countLiveData.setValue(count);
     }
 
-    public int getIncreaseValue() {
-        return ++count;
+    public void getIncreaseValue() {
+        ++count;
+        countLiveData.setValue(count);
     }
 
-    public int getCurrentValue() {
-        return count;
+    public MutableLiveData<Integer> getCurrentValue() {
+        countLiveData.setValue(count);
+        return countLiveData;
     }
 }
