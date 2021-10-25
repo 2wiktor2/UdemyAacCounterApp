@@ -6,20 +6,20 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView textViewCount;
     private MainActivityViewModel model;
+    private LiveData<Integer> countLiveData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        model = new ViewModelProvider(this).get(MainActivityViewModel.class);
-
 
         textViewCount = findViewById(R.id.textViewCount);
         Button buttonIncrement = findViewById(R.id.button_increment);
@@ -27,16 +27,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonIncrement.setOnClickListener(this);
         buttonDecrement.setOnClickListener(this);
 
-        textViewCount.setText(String.valueOf(model.getCurrentValue()));
+
+        model = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
+        countLiveData = model.getCurrentValue();
+        countLiveData.observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                textViewCount.setText(String.valueOf(integer));
+            }
+        });
     }
 
-
     private void decreaseValue() {
-        textViewCount.setText(String.valueOf(model.getDecreaseValue()));
+        model.getDecreaseValue();
     }
 
     private void increaseValue() {
-        textViewCount.setText(String.valueOf(model.getIncreaseValue()));
+        model.getIncreaseValue();
     }
 
     @Override
